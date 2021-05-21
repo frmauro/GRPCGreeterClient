@@ -30,7 +30,7 @@ namespace GrpcProductClient
         static string GetFileNameSslCredentials()
         {
             var CERT_PATH = Path.Combine(Environment.CurrentDirectory, "Certs");
-            //var cacert = File.ReadAllText(Path.Combine(CERT_PATH, "localhost.crt"));
+            var cacert = Path.Combine(CERT_PATH, "localhost.crt");
             var cert = Path.Combine(CERT_PATH, "localhost.pfx");
             //var key = File.ReadAllText(Path.Combine(CERT_PATH, "localhost.key"));
 
@@ -46,10 +46,10 @@ namespace GrpcProductClient
 
             //var creds = GetSslCredentials();
 
-            var fileNameSSLCertificate = GetFileNameSslCredentials();
-            var certificate = new System.Security.Cryptography.X509Certificates.X509Certificate(fileNameSSLCertificate, "123");
-            var handler = new HttpClientHandler();
-            handler.ClientCertificates.Add(certificate);
+            //var fileNameSSLCertificate = GetFileNameSslCredentials();
+            //var certificate = new System.Security.Cryptography.X509Certificates.X509Certificate2(fileNameSSLCertificate, "123");
+            //var handler = new HttpClientHandler();
+            //handler.ClientCertificates.Add(certificate);
 
             //var PcName = Environment.MachineName;
 
@@ -59,7 +59,7 @@ namespace GrpcProductClient
             //         new ChannelOption(ChannelOptions.SslTargetNameOverride, PcName)
             //     };
 
-            //AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
             // Return "true" to allow certificates that are untrusted/invalid
             // var httpHandler = new HttpClientHandler
@@ -78,7 +78,7 @@ namespace GrpcProductClient
             //var handler = new HttpClientHandler();
             //handler.ClientCertificates.Add(creds);
 
-            using var channel = GrpcChannel.ForAddress("https://localhost:8001", new GrpcChannelOptions { HttpHandler = handler });
+            using var channel = GrpcChannel.ForAddress("http://127.0.0.1:8081", new GrpcChannelOptions { Credentials = ChannelCredentials.Insecure });
 
             var client = new ProductServiceProto.ProductServiceProtoClient(channel);
             var reply = await client.SendProductAsync(new ProductRequest { Id = 1,  Description = "Product 001", Amount = "200", Price = "200", Status = "Active"});
