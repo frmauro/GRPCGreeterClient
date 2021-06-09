@@ -78,7 +78,8 @@ namespace GrpcProductClient
             //var handler = new HttpClientHandler();
             //handler.ClientCertificates.Add(creds);
 
-            using var channel = GrpcChannel.ForAddress("http://127.0.0.1:8081", new GrpcChannelOptions { Credentials = ChannelCredentials.Insecure });
+            //using var channel = GrpcChannel.ForAddress("http://127.0.0.1:8081", new GrpcChannelOptions { Credentials = ChannelCredentials.Insecure });
+            using var channel = GrpcChannel.ForAddress("https://127.0.0.1:5001", new GrpcChannelOptions { Credentials = ChannelCredentials.Insecure });
 
             var client = new ProductServiceProto.ProductServiceProtoClient(channel);
             var reply = await client.SendProductAsync(new ProductRequest { Id = 1,  Description = "Product 001", Amount = "200", Price = "200", Status = "Active"});
